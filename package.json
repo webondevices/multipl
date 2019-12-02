@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "test": "jest"
   },
   "author": "Mate Marschalko",
   "license": "ISC",
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.9.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
@@ -18,13 +20,20 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "@types/jest": "^24.0.23",
     "@types/react": "^16.9.13",
     "@types/react-dom": "^16.9.4",
+    "@types/redux-mock-store": "^1.0.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "jest-styled-components": "^6.3.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "redux": "^4.0.4",
     "redux-immutable-state-invariant": "^2.1.0",
-    "styled-components": "^4.4.1"
+    "redux-mock-store": "^1.5.3",
+    "styled-components": "^4.4.1",
+    "ts-jest": "^24.2.0"
   }
 }

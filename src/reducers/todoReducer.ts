@@ -2,15 +2,11 @@ import { TodoActionTypes, ADD_TODO, DELETE_LAST_TODO } from "../actions/types";
 
 import { TodoState } from ".";
 
-const initialState: TodoState = {
+export const initialState: TodoState = {
   todoList: ["filltodos"]
 };
 
-export default function todoReducer(
-  state = initialState,
-  action: TodoActionTypes
-) {
-  console.log("RED", action);
+export function todoReducer(state = initialState, action: TodoActionTypes) {
   switch (action.type) {
     case ADD_TODO:
       return {

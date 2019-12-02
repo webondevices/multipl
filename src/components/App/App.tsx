@@ -39,8 +39,12 @@ class App extends React.Component<Props, {}> {
           {todoList.map(todo => (
             <span key={todo}>{todo}</span>
           ))}
-          <button onClick={() => addTodo(`todo ${Math.random()}`)}>Add</button>
-          <button onClick={() => deleteLastTodo()}>Remove</button>
+          <button id="addButton" onClick={() => addTodo("todo")}>
+            Add
+          </button>
+          <button id="deleteButton" onClick={() => deleteLastTodo()}>
+            Remove
+          </button>
         </Paragraph>
       </Container>
     );
