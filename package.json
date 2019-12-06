@@ -7,15 +7,19 @@
     "start": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
     "test": "jest",
-    "lint": "eslint --report-unused-disable-directives --ext=.js,.ts,.jsx,.tsx --cache"
+    "lint": "eslint --cache --ext .js,.ts,.jsx,.tsx",
+    "storybook": "start-storybook"
   },
   "author": "Mate Marschalko",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@storybook/react": "^5.2.8",
     "@types/jest": "^24.0.23",
     "@types/react": "^16.9.13",
     "@types/react-dom": "^16.9.4",
     "@types/redux-mock-store": "^1.0.1",
+    "babel-loader": "^8.0.6",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^6.7.2",
@@ -32,6 +36,7 @@
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
     "jest-styled-components": "^6.3.4",
+    "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
@@ -46,5 +51,8 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0"
+  }
 }

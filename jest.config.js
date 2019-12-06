@@ -2,7 +2,7 @@ module.exports = {
     name: 'multipl',
     displayName: 'Multipl',
     bail: true,
-    coveragePathIgnorePatterns: ['/node_modules/'],
+    coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
     rootDir: './',
     collectCoverage: true,
     coverageReporters: ['lcov', 'text-summary'],
