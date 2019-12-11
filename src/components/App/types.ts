@@ -1,3 +1,1 @@
-export interface PageProps {
-  color: string;
-}
+export interface PageProps {}

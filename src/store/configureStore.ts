@@ -1,13 +1,19 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { rootReducer, RootState } from "../reducers/";
 import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
 
+const getCompose = () =>
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : compose;
+
 const configureStore = (initialState: Partial<RootState>) => {
-  return createStore(
-    rootReducer,
-    initialState,
+  const composeEnhancers = getCompose();
+  const enhancer = composeEnhancers(
     applyMiddleware(reduxImmutableStateInvariant())
   );
+
+  return createStore(rootReducer, initialState, enhancer);
 };
 
 export default configureStore;

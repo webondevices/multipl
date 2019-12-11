@@ -1,15 +1,10 @@
-import { Todo } from "../reducers/types";
+import { Page } from "../reducers/types";
 
-export const ADD_TODO = "ADD_TODO";
-export const DELETE_LAST_TODO = "DELETE_LAST_TODO";
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 
-interface SendTodoAction {
-  type: typeof ADD_TODO;
-  payload: Todo;
+interface SetCurrentPageAction {
+  type: typeof SET_CURRENT_PAGE;
+  payload: Page;
 }
 
-interface DeleteLastTodoAction {
-  type: typeof DELETE_LAST_TODO;
-}
-
-export type TodoActionTypes = SendTodoAction | DeleteLastTodoAction;
+export type AppActionTypes = SetCurrentPageAction;

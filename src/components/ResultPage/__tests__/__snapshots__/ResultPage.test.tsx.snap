@@ -3,29 +3,14 @@
 exports[`renders correctly 1`] = `
 initialize {
   "0": Object {
-    "attribs": Object {
-      "class": "sc-bxivhb fXgYAx",
-    },
+    "attribs": Object {},
     "children": Array [
       Object {
-        "attribs": Object {},
-        "children": Array [
-          Object {
-            "data": "Home Page",
-            "next": null,
-            "parent": [Circular],
-            "prev": null,
-            "type": "text",
-          },
-        ],
-        "name": "div",
-        "namespace": "http://www.w3.org/1999/xhtml",
+        "data": "Result Page",
         "next": null,
         "parent": [Circular],
         "prev": null,
-        "type": "tag",
-        "x-attribsNamespace": Object {},
-        "x-attribsPrefix": Object {},
+        "type": "text",
       },
     ],
     "name": "div",
@@ -48,12 +33,8 @@ initialize {
       "x-attribsPrefix": Object {},
     },
     "type": "tag",
-    "x-attribsNamespace": Object {
-      "class": undefined,
-    },
-    "x-attribsPrefix": Object {
-      "class": undefined,
-    },
+    "x-attribsNamespace": Object {},
+    "x-attribsPrefix": Object {},
   },
   "_root": [Circular],
   "length": 1,

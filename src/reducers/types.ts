@@ -1,5 +1,9 @@
-export type Todo = string;
+export interface AppState {
+  currentPage: Page;
+}
 
-export interface TodoState {
-  todoList: Todo[];
+export enum Page {
+  HomePage = "HOME_PAGE",
+  GamePage = "GAME_PAGE",
+  ResultPage = "RESULT_PAGE"
 }

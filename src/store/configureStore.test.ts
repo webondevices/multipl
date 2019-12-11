@@ -1,16 +1,21 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import configureStore from "./configureStore";
+import { Page } from "../reducers";
 
 test("creates the store with initial state", () => {
   const store = configureStore({
-    todos: {
-      todoList: ["test_value"]
+    app: {
+      currentPage: Page.GamePage
     }
   });
   const state = store.getState();
 
   expect(state).toEqual({
-    todos: {
-      todoList: ["test_value"]
+    app: {
+      currentPage: Page.GamePage
     }
   });
 });
