@@ -1,6 +1,5 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import styled from "styled-components";
 import { PageProps } from "./types";
 import { RootState, Page } from "../../reducers";
@@ -13,13 +12,7 @@ const mapStateToProps = (state: RootState) => ({
   currentPage: state.app.currentPage
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setCurrentPage: (page: Page) => dispatch(actions.setCurrentPage(page))
-});
-
-type Props = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps> &
-  PageProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof actions & PageProps;
 
 const Container = styled.div`
   font-family: sans-serif;
@@ -31,6 +24,7 @@ class App extends React.Component<Props, {}> {
     const { currentPage } = this.props;
     return (
       <Container>
+        <h1>Multipl</h1>
         {currentPage === Page.HomePage && <HomePage />}
         {currentPage === Page.GamePage && <GamePage />}
         {currentPage === Page.ResultPage && <ResultPage />}
@@ -39,4 +33,4 @@ class App extends React.Component<Props, {}> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, actions)(App);
