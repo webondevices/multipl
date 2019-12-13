@@ -12,7 +12,8 @@ export interface GameState {
   roundActive: boolean;
   elapsedTime: number;
   tasks: Array<Multiplication>;
-  currentTask: Multiplication | [];
+  currentTask: Multiplication;
+  answer: string;
 }
 
 export enum Page {

@@ -3,7 +3,11 @@ import {
   SET_PLAYER_NAME,
   VALIDATE_PLAYER_NAME,
   SET_CURRENT_TASK,
-  SET_ROUND_STATE
+  SET_ROUND_STATE,
+  INCREMENT_TIMER,
+  SET_TIMER,
+  SLICE_TASK,
+  SET_ANSWER
 } from "../actions/types";
 
 import { GameState, Multiplication } from ".";
@@ -14,14 +18,15 @@ let combinations: Array<Multiplication> = [];
 tables.forEach(x => combinators.forEach(y => combinations.push([x, y])));
 
 export const initialState: GameState = {
-  playerName: "",
+  playerName: "Mate",
   playerNameValid: false,
   playerNameError: "",
   selectedTables: tables,
   roundActive: false,
   elapsedTime: 0,
   tasks: combinations,
-  currentTask: []
+  currentTask: [0, 0],
+  answer: ""
 };
 
 const validateName = playerName => {
@@ -51,6 +56,16 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
         ...state,
         ...validateName(state.playerName)
       };
+    case INCREMENT_TIMER:
+      return {
+        ...state,
+        elapsedTime: state.elapsedTime + 1
+      };
+    case SET_TIMER:
+      return {
+        ...state,
+        elapsedTime: action.payload
+      };
     case SET_ROUND_STATE:
       return {
         ...state,
@@ -61,7 +76,18 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
         ...state,
         currentTask: action.payload
       };
-
+    case SLICE_TASK:
+      let newTasksList = state.tasks;
+      newTasksList.splice(action.payload, 1);
+      return {
+        ...state,
+        tasks: newTasksList
+      };
+    case SET_ANSWER:
+      return {
+        ...state,
+        answer: action.payload
+      };
     default:
       return state;
   }
