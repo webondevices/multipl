@@ -26,7 +26,6 @@ class HomePage extends React.Component<Props, {}> {
       playerNameValid,
       playerNameError
     } = this.props;
-    console.log(playerNameValid, playerNameError);
     return (
       <React.Fragment>
         <p>Welcome! Ready to play?</p>

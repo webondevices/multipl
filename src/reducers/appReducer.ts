@@ -4,7 +4,7 @@ import { Page } from "./types";
 import { AppState } from ".";
 
 export const initialState: AppState = {
-  currentPage: Page.GamePage
+  currentPage: Page.HomePage
 };
 
 export function appReducer(state = initialState, action: AppActionTypes) {

@@ -1,8 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { RootState } from "../../reducers";
+import { RootState, Page } from "../../reducers";
 import * as actions from "../../actions";
+import { setCurrentPage, resetTasks, sliceNextRandomTask } from "../../actions";
+import { clearImmediate } from "timers";
 
 const mapStateToProps = (state: RootState) => ({
   playerName: state.game.playerName,
@@ -23,10 +25,14 @@ const Input = styled.input`
 `;
 
 class GamePage extends React.Component<Props, {}> {
+  timer: NodeJS.Timeout;
   constructor(props) {
     super(props);
-    setInterval(props.incrementTimer, 1000);
-    props.sliceNextRandomTask();
+    this.timer = setInterval(props.incrementTimer, 1000);
+    props.resetGame();
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
   render() {
     const {
@@ -36,7 +42,9 @@ class GamePage extends React.Component<Props, {}> {
       currentTask,
       setAnswer,
       checkAnswer,
-      answer
+      answer,
+      setCurrentPage,
+      resetGame
     } = this.props;
     const seconds = elapsedTime % 60;
     const minutes = Math.floor(elapsedTime / 60);
@@ -60,6 +68,9 @@ class GamePage extends React.Component<Props, {}> {
           {minutes}:{seconds < 10 ? "0" : ""}
           {seconds}
         </div>
+
+        <button onClick={() => setCurrentPage(Page.HomePage)}>Back</button>
+        <button onClick={resetGame}>Restart</button>
       </React.Fragment>
     );
   }

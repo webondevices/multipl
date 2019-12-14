@@ -1,5 +1,5 @@
 import { ThunkDispatch } from "redux-thunk";
-import { Multiplication, RootState } from "../reducers";
+import { Multiplication, RootState, Page } from "../reducers";
 import {
   SET_PLAYER_NAME,
   SET_ROUND_STATE,
@@ -9,9 +9,11 @@ import {
   SET_TIMER,
   SLICE_TASK,
   SET_ANSWER,
+  RESET_TASKS,
   GameActionTypes,
   AppActionTypes
 } from ".";
+import { setCurrentPage } from "./appActions";
 
 export function setPlayerName(name: string): GameActionTypes {
   return {
@@ -67,6 +69,12 @@ export function setAnswer(answer: string): GameActionTypes {
   };
 }
 
+export function resetTasks(): GameActionTypes {
+  return {
+    type: RESET_TASKS
+  };
+}
+
 export function sliceNextRandomTask() {
   return async (
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
@@ -85,12 +93,31 @@ export function checkAnswer() {
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
     getState: () => RootState
   ) => {
-    const { answer, currentTask } = getState().game;
+    const { answer, currentTask, tasks } = getState().game;
     const actualAnswer = currentTask[0] * currentTask[1];
+
+    if (answer.length > actualAnswer.toString().length) {
+      dispatch(setAnswer(""));
+    }
 
     if (parseInt(answer) === actualAnswer) {
       dispatch(setAnswer(""));
-      dispatch(sliceNextRandomTask());
+
+      if (tasks.length > 0) {
+        dispatch(sliceNextRandomTask());
+      } else {
+        dispatch(setCurrentPage(Page.ResultPage));
+      }
     }
+  };
+}
+
+export function resetGame() {
+  return async (
+    dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>
+  ) => {
+    dispatch(resetTasks());
+    dispatch(sliceNextRandomTask());
+    dispatch(setTimer(0));
   };
 }

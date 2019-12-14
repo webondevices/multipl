@@ -7,15 +7,20 @@ import {
   INCREMENT_TIMER,
   SET_TIMER,
   SLICE_TASK,
-  SET_ANSWER
+  SET_ANSWER,
+  RESET_TASKS
 } from "../actions/types";
 
 import { GameState, Multiplication } from ".";
 
 const combinators = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const tables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-let combinations: Array<Multiplication> = [];
-tables.forEach(x => combinators.forEach(y => combinations.push([x, y])));
+
+const getCombinations = () => {
+  let combinations: Array<Multiplication> = [];
+  tables.forEach(x => combinators.forEach(y => combinations.push([x, y])));
+  return combinations;
+};
 
 export const initialState: GameState = {
   playerName: "Mate",
@@ -24,7 +29,7 @@ export const initialState: GameState = {
   selectedTables: tables,
   roundActive: false,
   elapsedTime: 0,
-  tasks: combinations,
+  tasks: getCombinations(),
   currentTask: [0, 0],
   answer: ""
 };
@@ -87,6 +92,11 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
       return {
         ...state,
         answer: action.payload
+      };
+    case RESET_TASKS:
+      return {
+        ...state,
+        tasks: getCombinations()
       };
     default:
       return state;
