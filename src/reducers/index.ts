@@ -10,4 +10,5 @@ export const rootReducer = combineReducers({
 export type RootState = ReturnType<typeof rootReducer>;
 
 export * from "./appReducer";
+export * from "./gameReducer";
 export * from "./types";

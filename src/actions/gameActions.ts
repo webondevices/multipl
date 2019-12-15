@@ -10,10 +10,12 @@ import {
   SLICE_TASK,
   SET_ANSWER,
   RESET_TASKS,
+  SET_TABLES,
   GameActionTypes,
   AppActionTypes
 } from ".";
 import { setCurrentPage } from "./appActions";
+import * as firebase from "../utils/firebase";
 
 export function setPlayerName(name: string): GameActionTypes {
   return {
@@ -75,6 +77,13 @@ export function resetTasks(): GameActionTypes {
   };
 }
 
+export function setTables(tables): GameActionTypes {
+  return {
+    type: SET_TABLES,
+    payload: tables
+  };
+}
+
 export function sliceNextRandomTask() {
   return async (
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
@@ -93,7 +102,14 @@ export function checkAnswer() {
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
     getState: () => RootState
   ) => {
-    const { answer, currentTask, tasks } = getState().game;
+    const {
+      answer,
+      currentTask,
+      tasks,
+      selectedTables,
+      playerName,
+      elapsedTime
+    } = getState().game;
     const actualAnswer = currentTask[0] * currentTask[1];
 
     if (answer.length > actualAnswer.toString().length) {
@@ -106,7 +122,14 @@ export function checkAnswer() {
       if (tasks.length > 0) {
         dispatch(sliceNextRandomTask());
       } else {
-        dispatch(setCurrentPage(Page.ResultPage));
+        firebase
+          .saveItem(selectedTables.toString(), {
+            playerName,
+            elapsedTime
+          })
+          .then(() => {
+            dispatch(setCurrentPage(Page.ResultPage));
+          });
       }
     }
   };

@@ -1,4 +1,4 @@
-import { initialState, appReducer } from "./appReducer";
+import { appInitialState, appReducer } from "./appReducer";
 import { setCurrentPage } from "../actions";
 import { Page } from "./types";
 
@@ -12,7 +12,7 @@ it("inits with default state", () => {
 });
 
 it("handles SET_CURRENT_PAGE action", () => {
-  const state = initialState;
+  const state = appInitialState;
   const value = Page.ResultPage;
   const action = setCurrentPage(value);
 

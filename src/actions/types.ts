@@ -10,6 +10,7 @@ export const SET_CURRENT_TASK = "SET_CURRENT_TASK";
 export const SLICE_TASK = "SLICE_TASK";
 export const SET_ANSWER = "SET_ANSWER";
 export const RESET_TASKS = "RESET_TASKS";
+export const SET_TABLES = "SET_TABLES";
 
 interface SetCurrentPageAction {
   type: typeof SET_CURRENT_PAGE;
@@ -63,6 +64,11 @@ interface ResetTasksAction {
   type: typeof RESET_TASKS;
 }
 
+interface SetTablesAction {
+  type: typeof SET_TABLES;
+  payload: string;
+}
+
 export type AppActionTypes = SetCurrentPageAction;
 export type GameActionTypes =
   | SetPlayerNameAction
@@ -73,4 +79,5 @@ export type GameActionTypes =
   | SetCurrentTaskAction
   | SliceTaskAction
   | SetAnswerAction
-  | ResetTasksAction;
+  | ResetTasksAction
+  | SetTablesAction;

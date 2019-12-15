@@ -8,28 +8,29 @@ import {
   SET_TIMER,
   SLICE_TASK,
   SET_ANSWER,
-  RESET_TASKS
+  RESET_TASKS,
+  SET_TABLES
 } from "../actions/types";
 
 import { GameState, Multiplication } from ".";
 
-const combinators = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const tables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const fullSet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const easySet = [1, 2, 3, 5, 10];
 
-const getCombinations = () => {
+const getCombinations = selectedTables => {
   let combinations: Array<Multiplication> = [];
-  tables.forEach(x => combinators.forEach(y => combinations.push([x, y])));
+  selectedTables.forEach(x => fullSet.forEach(y => combinations.push([x, y])));
   return combinations;
 };
 
-export const initialState: GameState = {
-  playerName: "Mate",
+export const gameInitialState: GameState = {
+  playerName: "",
   playerNameValid: false,
   playerNameError: "",
-  selectedTables: tables,
+  selectedTables: easySet,
   roundActive: false,
   elapsedTime: 0,
-  tasks: getCombinations(),
+  tasks: getCombinations(easySet),
   currentTask: [0, 0],
   answer: ""
 };
@@ -48,7 +49,7 @@ const validateName = playerName => {
   }
 };
 
-export function gameReducer(state = initialState, action: GameActionTypes) {
+export function gameReducer(state = gameInitialState, action: GameActionTypes) {
   switch (action.type) {
     case SET_PLAYER_NAME:
       return {
@@ -82,7 +83,7 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
         currentTask: action.payload
       };
     case SLICE_TASK:
-      let newTasksList = state.tasks;
+      let newTasksList = [...state.tasks];
       newTasksList.splice(action.payload, 1);
       return {
         ...state,
@@ -96,7 +97,14 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
     case RESET_TASKS:
       return {
         ...state,
-        tasks: getCombinations()
+        tasks: getCombinations(state.selectedTables)
+      };
+    case SET_TABLES:
+      const newTables = action.payload.split(",").map(str => parseInt(str));
+      return {
+        ...state,
+        selectedTables: newTables,
+        tasks: getCombinations(newTables)
       };
     default:
       return state;

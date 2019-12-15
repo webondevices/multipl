@@ -3,11 +3,11 @@ import { Page } from "./types";
 
 import { AppState } from ".";
 
-export const initialState: AppState = {
+export const appInitialState: AppState = {
   currentPage: Page.HomePage
 };
 
-export function appReducer(state = initialState, action: AppActionTypes) {
+export function appReducer(state = appInitialState, action: AppActionTypes) {
   switch (action.type) {
     case SET_CURRENT_PAGE:
       return {
