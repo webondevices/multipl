@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { RootState, Page } from "../../reducers";
 import * as actions from "../../actions";
 import * as firebase from "../../utils/firebase";
@@ -19,6 +20,23 @@ type Props = ReturnType<typeof mapStateToProps> & typeof actions;
 type State = {
   highscores: Array<HighScore>;
 };
+
+const CTAButton = styled.button`
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  margin: 20px;
+`;
+
+const Score = styled.div<{ selected: boolean }>`
+  font-size: 18px;
+  margin: 10px;
+  outline: ${({ selected }) =>
+    selected ? "2px solid red" : "2px solid transparent"};
+  font-weight: ${({ selected }) => (selected ? "bold" : "normal")};
+`;
 
 class HomePage extends React.Component<Props, State> {
   constructor(props) {
@@ -56,14 +74,18 @@ class HomePage extends React.Component<Props, State> {
         </h1>
 
         <h2>High scores:</h2>
-        {highscores.map(({ elapsedTime, playerName }, i) => (
-          <div key={playerName + elapsedTime + i}>
-            {`${i + 1}. ${playerName}....... in ${elapsedTime} seconds`}
-          </div>
+        {highscores.map(({ elapsedTime: time, playerName: name }, i) => (
+          <Score key={name + time + i} selected={name === playerName}>
+            {`${i + 1}. ${name}....... in ${time} seconds`}
+          </Score>
         ))}
 
-        <button onClick={() => setCurrentPage(Page.HomePage)}>Back home</button>
-        <button onClick={() => setCurrentPage(Page.GamePage)}>Restart</button>
+        <CTAButton onClick={() => setCurrentPage(Page.HomePage)}>
+          Back home
+        </CTAButton>
+        <CTAButton onClick={() => setCurrentPage(Page.GamePage)}>
+          Restart
+        </CTAButton>
       </React.Fragment>
     );
   }

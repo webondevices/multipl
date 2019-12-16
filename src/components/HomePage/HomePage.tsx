@@ -18,6 +18,43 @@ const ErrorLabel = styled.span<{ show: boolean }>`
   color: red;
 `;
 
+const FormLabel = styled.label`
+  font-size: 18px;
+`;
+
+const NameInput = styled.input`
+  box-sizing: border-box;
+  display: block;
+  width: 300px;
+  height: 40px;
+  margin: 20px auto;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  outline: 2px solid lightgray;
+
+  &:focus {
+    outline: 4px solid black;
+  }
+`;
+
+const TablesFieldset = styled.fieldset`
+  border: none;
+`;
+
+const TablesLegend = styled.legend`
+  font-size: 18px;
+`;
+
+const CTAButton = styled.button`
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  margin: 20px;
+`;
+
 class HomePage extends React.Component<Props, {}> {
   render() {
     const {
@@ -34,8 +71,8 @@ class HomePage extends React.Component<Props, {}> {
       <React.Fragment>
         <p>Welcome! Ready to play?</p>
 
-        <label htmlFor="player-name">Enter your name:</label>
-        <input
+        <FormLabel htmlFor="player-name">Enter your name:</FormLabel>
+        <NameInput
           type="text"
           id="player-name"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,9 +83,9 @@ class HomePage extends React.Component<Props, {}> {
         <ErrorLabel show={!playerNameValid && playerNameError}>
           {playerNameError}
         </ErrorLabel>
-        <fieldset>
-          <legend>Choose the difficulty:</legend>
-          <label>
+        <TablesFieldset>
+          <TablesLegend>Choose the difficulty:</TablesLegend>
+          <FormLabel>
             Easy: {easySet.toString()}
             <input
               name="tables"
@@ -59,9 +96,9 @@ class HomePage extends React.Component<Props, {}> {
               value={easySet.toString()}
               checked={selectedTables.toString() === easySet.toString()}
             />
-          </label>
+          </FormLabel>
           <br />
-          <label>
+          <FormLabel>
             Full: {fullSet.toString()}
             <input
               name="tables"
@@ -72,10 +109,10 @@ class HomePage extends React.Component<Props, {}> {
               value={fullSet.toString()}
               checked={selectedTables.toString() === fullSet.toString()}
             />
-          </label>
-        </fieldset>
+          </FormLabel>
+        </TablesFieldset>
 
-        <button onClick={proceedToGame}>Start</button>
+        <CTAButton onClick={proceedToGame}>Start</CTAButton>
       </React.Fragment>
     );
   }

@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { RootState, Page } from "../../reducers";
 import * as actions from "../../actions";
-import { setCurrentPage, resetTasks, sliceNextRandomTask } from "../../actions";
-import { clearImmediate } from "timers";
 
 const mapStateToProps = (state: RootState) => ({
   playerName: state.game.playerName,
@@ -22,6 +20,20 @@ const Input = styled.input`
   font-size: 64px;
   text-align: center;
   border: 2px solid rgb(220, 220, 220);
+`;
+
+const CTAButton = styled.button`
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  margin: 20px;
+`;
+
+const Task = styled.div`
+  font-size: 24px;
+  margin: 20px;
 `;
 
 class GamePage extends React.Component<Props, {}> {
@@ -52,9 +64,9 @@ class GamePage extends React.Component<Props, {}> {
       <React.Fragment>
         <p>Answer all the questions, {playerName}!</p>
         <div>Tasks left: {tasks.length}</div>
-        <div>
+        <Task>
           {currentTask[0]} x {currentTask[1]}
-        </div>
+        </Task>
         <Input
           type="text"
           autoFocus
@@ -69,8 +81,10 @@ class GamePage extends React.Component<Props, {}> {
           {seconds}
         </div>
 
-        <button onClick={() => setCurrentPage(Page.HomePage)}>Back</button>
-        <button onClick={resetGame}>Restart</button>
+        <CTAButton onClick={() => setCurrentPage(Page.HomePage)}>
+          Back
+        </CTAButton>
+        <CTAButton onClick={resetGame}>Restart</CTAButton>
       </React.Fragment>
     );
   }
