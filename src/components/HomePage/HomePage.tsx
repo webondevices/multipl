@@ -57,7 +57,11 @@ const HomePage: React.FC<Props> = props => {
 
   return (
     <>
-      <Text>Welcome! Ready to play?</Text>
+      <Text>
+        Learn the times tables by competing with your firends!
+        <br />
+        Ready to play?
+      </Text>
       <InputField
         type="text"
         id="player-name"
