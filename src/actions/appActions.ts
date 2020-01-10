@@ -1,11 +1,11 @@
 import {ThunkDispatch} from 'redux-thunk';
-import * as fb from 'firebase';
 import {Page, RootState} from '../reducers';
 import {SET_CURRENT_PAGE, AppActionTypes, GameActionTypes} from './types';
 import {validatePlayerName} from './playerActions';
+import * as firebase from '../utils/firebase';
 
 export function setCurrentPage(page: Page): AppActionTypes {
-  fb.analytics().logEvent('page_view', {page});
+  firebase.logEvent('page_view', {page});
   return {
     type: SET_CURRENT_PAGE,
     payload: page,

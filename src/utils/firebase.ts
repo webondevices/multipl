@@ -1,5 +1,8 @@
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import firebaseConfig from '../../firebaseConfig';
+import 'firebase/database';
+import 'firebase/auth';
+import 'firebase/analytics';
 
 export const initialise = () => {
   firebase.initializeApp(firebaseConfig);
@@ -28,3 +31,6 @@ export const readItemOnce = ref => {
     .orderByChild('elapsedTime')
     .once('value');
 };
+
+export const logEvent = (dimension, value) =>
+  firebase.analytics().logEvent(dimension, value);

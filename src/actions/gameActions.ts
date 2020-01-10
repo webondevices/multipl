@@ -1,5 +1,4 @@
 import {ThunkDispatch} from 'redux-thunk';
-import * as fb from 'firebase';
 import {Multiplication, RootState, Page} from '../reducers';
 import {
   SET_PLAYER_NAME,
@@ -121,7 +120,7 @@ export function checkAnswer() {
             elapsedTime,
           })
           .then(() => {
-            fb.analytics().logEvent('goal_completion', {name: 'completed'});
+            firebase.logEvent('goal_completion', {name: 'completed'});
             dispatch(setCurrentPage(Page.ResultPage));
           });
       }
