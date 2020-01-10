@@ -1,34 +1,51 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import { RootState, Page } from "../../reducers";
-import * as actions from "../../actions";
+import * as React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
+import {RootState, Page} from '../../reducers';
+import {easySet} from '../../reducers/gameReducer';
+import * as actions from '../../actions';
+import {Text} from '../Typography/Text';
+import {Button} from '../Button/Button';
 
 const mapStateToProps = (state: RootState) => ({
   playerName: state.game.playerName,
   tasks: state.game.tasks,
   elapsedTime: state.game.elapsedTime,
   currentTask: state.game.currentTask,
-  answer: state.game.answer
+  answer: state.game.answer,
+  selectedTables: state.game.selectedTables,
 });
 
 type Props = ReturnType<typeof mapStateToProps> & typeof actions;
 
-const Input = styled.input`
+const Input = styled.input<{alternate: boolean}>`
+  @keyframes fade1 {
+    from {
+      background-color: green;
+    }
+    to {
+      background-color: white;
+    }
+  }
+  @keyframes fade2 {
+    from {
+      background-color: green;
+    }
+    to {
+      background-color: white;
+    }
+  }
+
   width: 115px;
   height: 100px;
   font-size: 64px;
   text-align: center;
   border: 2px solid rgb(220, 220, 220);
-`;
+  animation: ${({alternate}) => (alternate ? 'fade1' : 'fade2')} 1s;
 
-const CTAButton = styled.button`
-  width: 200px;
-  height: 40px;
-  font-size: 18px;
-  background-color: black;
-  color: white;
-  margin: 20px;
+  &:focus {
+    outline: 4px solid #ff8f8f;
+  }
 `;
 
 const Task = styled.div`
@@ -36,16 +53,41 @@ const Task = styled.div`
   margin: 20px;
 `;
 
-class GamePage extends React.Component<Props, {}> {
+const ProgressBar = styled.div<{total: number; left: number}>`
+  width: calc((80% / (${({total, left}) => total / (total - left)})) + 20%);
+  height: 30px;
+  margin: 10px auto;
+  padding-top: 10px;
+  color: white;
+  background-color: hsl(
+    ${({total, left}) => 100 - 100 * (left / total)},
+    100%,
+    30%
+  );
+  transition: width 300ms, background-color 300ms;
+`;
+
+class GamePage extends React.Component<Props, {updated: boolean}> {
   timer: NodeJS.Timeout;
+
+  previousTask: number;
+
+  animAlternate: boolean;
+
+  private audioElement = React.createRef<HTMLAudioElement>();
+
   constructor(props) {
     super(props);
     this.timer = setInterval(props.incrementTimer, 1000);
+    this.previousTask = props.tasks.length;
+    this.animAlternate = false;
     props.resetGame();
   }
+
   componentWillUnmount() {
     clearInterval(this.timer);
   }
+
   render() {
     const {
       playerName,
@@ -56,18 +98,34 @@ class GamePage extends React.Component<Props, {}> {
       checkAnswer,
       answer,
       setCurrentPage,
-      resetGame
+      resetGame,
+      selectedTables,
     } = this.props;
     const seconds = elapsedTime % 60;
     const minutes = Math.floor(elapsedTime / 60);
+    const total = selectedTables.toString() === easySet.toString() ? 50 : 100;
+    if (tasks.length !== this.previousTask) {
+      const audio = this.audioElement.current;
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+      this.previousTask = tasks.length;
+      this.animAlternate = !this.animAlternate;
+    }
+
     return (
-      <React.Fragment>
-        <p>Answer all the questions, {playerName}!</p>
-        <div>Tasks left: {tasks.length}</div>
+      <>
+        <Text>Answer all the questions, {playerName}!</Text>
         <Task>
-          {currentTask[0]} x {currentTask[1]}
+          {currentTask[0]}x{currentTask[1]}
         </Task>
+        <audio
+          ref={this.audioElement}
+          src="https://freesound.org/data/previews/109/109662_945474-lq.mp3"
+        />
         <Input
+          alternate={this.animAlternate}
           type="text"
           autoFocus
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,16 +134,17 @@ class GamePage extends React.Component<Props, {}> {
           }}
           value={answer}
         />
+        <ProgressBar total={total} left={tasks.length}>
+          Tasks left: {tasks.length}
+        </ProgressBar>
         <div>
-          {minutes}:{seconds < 10 ? "0" : ""}
+          {minutes}:{seconds < 10 ? '0' : ''}
           {seconds}
         </div>
 
-        <CTAButton onClick={() => setCurrentPage(Page.HomePage)}>
-          Back
-        </CTAButton>
-        <CTAButton onClick={resetGame}>Restart</CTAButton>
-      </React.Fragment>
+        <Button onClick={() => setCurrentPage(Page.HomePage)}>Back</Button>
+        <Button onClick={resetGame}>Restart</Button>
+      </>
     );
   }
 }

@@ -1,10 +1,8 @@
-import { SET_CURRENT_PAGE, AppActionTypes } from "../actions/types";
-import { Page } from "./types";
-
-import { AppState } from ".";
+import {SET_CURRENT_PAGE, AppActionTypes} from '../actions/types';
+import {Page, AppState} from './types';
 
 export const appInitialState: AppState = {
-  currentPage: Page.HomePage
+  currentPage: Page.HomePage,
 };
 
 export function appReducer(state = appInitialState, action: AppActionTypes) {
@@ -12,7 +10,7 @@ export function appReducer(state = appInitialState, action: AppActionTypes) {
     case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentPage: action.payload
+        currentPage: action.payload,
       };
 
     default:

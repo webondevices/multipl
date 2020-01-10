@@ -9,44 +9,46 @@ import {
   SLICE_TASK,
   SET_ANSWER,
   RESET_TASKS,
-  SET_TABLES
-} from "../actions/types";
+  SET_TABLES,
+} from '../actions/types';
 
-import { GameState, Multiplication } from ".";
+import {GameState, Multiplication} from './types';
 
 export const fullSet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 export const easySet = [1, 2, 3, 5, 10];
 
 const getCombinations = selectedTables => {
-  let combinations: Array<Multiplication> = [];
+  const combinations: Array<Multiplication> = [];
   selectedTables.forEach(x => fullSet.forEach(y => combinations.push([x, y])));
   return combinations;
 };
 
 export const gameInitialState: GameState = {
-  playerName: "",
+  playerName: '',
   playerNameValid: false,
-  playerNameError: "",
+  playerNameError: '',
   selectedTables: easySet,
   roundActive: false,
   elapsedTime: 0,
   tasks: getCombinations(easySet),
   currentTask: [0, 0],
-  answer: ""
+  answer: '',
 };
 
 const validateName = playerName => {
+  let newState = {};
   if (playerName.length > 0) {
-    return {
+    newState = {
       playerNameValid: true,
-      playerNameError: ""
+      playerNameError: '',
     };
   } else {
-    return {
+    newState = {
       playerNameValid: false,
-      playerNameError: "Please enter a valid name!"
+      playerNameError: 'Please enter a valid name!',
     };
   }
+  return newState;
 };
 
 export function gameReducer(state = gameInitialState, action: GameActionTypes) {
@@ -55,56 +57,56 @@ export function gameReducer(state = gameInitialState, action: GameActionTypes) {
       return {
         ...state,
         playerName: action.payload,
-        playerNameError: ""
+        playerNameError: '',
       };
     case VALIDATE_PLAYER_NAME:
       return {
         ...state,
-        ...validateName(state.playerName)
+        ...validateName(state.playerName),
       };
     case INCREMENT_TIMER:
       return {
         ...state,
-        elapsedTime: state.elapsedTime + 1
+        elapsedTime: state.elapsedTime + 1,
       };
     case SET_TIMER:
       return {
         ...state,
-        elapsedTime: action.payload
+        elapsedTime: action.payload,
       };
     case SET_ROUND_STATE:
       return {
         ...state,
-        roundActive: action.payload
+        roundActive: action.payload,
       };
     case SET_CURRENT_TASK:
       return {
         ...state,
-        currentTask: action.payload
+        currentTask: action.payload,
       };
     case SLICE_TASK:
-      let newTasksList = [...state.tasks];
+      const newTasksList = [...state.tasks];
       newTasksList.splice(action.payload, 1);
       return {
         ...state,
-        tasks: newTasksList
+        tasks: newTasksList,
       };
     case SET_ANSWER:
       return {
         ...state,
-        answer: action.payload
+        answer: action.payload,
       };
     case RESET_TASKS:
       return {
         ...state,
-        tasks: getCombinations(state.selectedTables)
+        tasks: getCombinations(state.selectedTables),
       };
     case SET_TABLES:
-      const newTables = action.payload.split(",").map(str => parseInt(str));
+      const newTables = action.payload.split(',').map(str => parseInt(str, 10));
       return {
         ...state,
         selectedTables: newTables,
-        tasks: getCombinations(newTables)
+        tasks: getCombinations(newTables),
       };
     default:
       return state;

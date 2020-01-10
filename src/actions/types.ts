@@ -1,16 +1,16 @@
-import { Page, Multiplication } from "../reducers/types";
+import {Page, Multiplication} from '../reducers/types';
 
-export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
-export const VALIDATE_PLAYER_NAME = "VALIDATE_PLAYER_NAME";
-export const INCREMENT_TIMER = "INCREMENT_TIMER";
-export const SET_TIMER = "SET_TIMER";
-export const SET_PLAYER_NAME = "SET_PLAYER_NAME";
-export const SET_ROUND_STATE = "SET_ROUND_STATE";
-export const SET_CURRENT_TASK = "SET_CURRENT_TASK";
-export const SLICE_TASK = "SLICE_TASK";
-export const SET_ANSWER = "SET_ANSWER";
-export const RESET_TASKS = "RESET_TASKS";
-export const SET_TABLES = "SET_TABLES";
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+export const VALIDATE_PLAYER_NAME = 'VALIDATE_PLAYER_NAME';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
+export const SET_TIMER = 'SET_TIMER';
+export const SET_PLAYER_NAME = 'SET_PLAYER_NAME';
+export const SET_ROUND_STATE = 'SET_ROUND_STATE';
+export const SET_CURRENT_TASK = 'SET_CURRENT_TASK';
+export const SLICE_TASK = 'SLICE_TASK';
+export const SET_ANSWER = 'SET_ANSWER';
+export const RESET_TASKS = 'RESET_TASKS';
+export const SET_TABLES = 'SET_TABLES';
 
 interface SetCurrentPageAction {
   type: typeof SET_CURRENT_PAGE;
