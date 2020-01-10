@@ -79,17 +79,12 @@ class HomePage extends React.Component<Props, State> {
   render() {
     const {elapsedTime, setCurrentPage, playerName} = this.props;
     const {highscores} = this.state;
-    const seconds = elapsedTime % 60;
-    const minutes = Math.floor(elapsedTime / 60);
 
     return (
       <>
         <Text>Congratulations, {playerName}! You completed the task in:</Text>
 
-        <h1>
-          {minutes}:{seconds < 10 ? '0' : ''}
-          {seconds}
-        </h1>
+        <h1>{elapsedTime} seconds</h1>
 
         <h2>High scores:</h2>
         {highscores.map(({elapsedTime: time, playerName: name, index}) => (

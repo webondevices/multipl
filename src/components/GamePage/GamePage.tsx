@@ -74,8 +74,6 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
 
   animAlternate: boolean;
 
-  private audioElement = React.createRef<HTMLAudioElement>();
-
   constructor(props) {
     super(props);
     this.timer = setInterval(props.incrementTimer, 1000);
@@ -105,11 +103,6 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
     const minutes = Math.floor(elapsedTime / 60);
     const total = selectedTables.toString() === easySet.toString() ? 50 : 100;
     if (tasks.length !== this.previousTask) {
-      const audio = this.audioElement.current;
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play();
-      }
       this.previousTask = tasks.length;
       this.animAlternate = !this.animAlternate;
     }
@@ -120,10 +113,6 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
         <Task>
           {currentTask[0]}x{currentTask[1]}
         </Task>
-        <audio
-          ref={this.audioElement}
-          src="https://freesound.org/data/previews/109/109662_945474-lq.mp3"
-        />
         <Input
           alternate={this.animAlternate}
           type="text"
