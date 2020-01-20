@@ -1,2 +1,2 @@
 # multipl
-multipl.com
+https://webondevices.github.io/multipl/
