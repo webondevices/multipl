@@ -21,6 +21,7 @@ module.exports = {
         'react/forbid-prop-types': 'error',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
+        'react/jsx-props-no-spreading': 'off',
         'import/no-extraneous-dependencies': [
             'error',
             { optionalDependencies: false, devDependencies: true },

@@ -1,18 +1,18 @@
-import configureStore from "redux-mock-store";
-import { render } from "enzyme";
-import * as React from "react";
-import App from "../App";
-import { RootState, Page } from "../../../reducers";
+import configureStore from 'redux-mock-store';
+import {render} from 'enzyme';
+import * as React from 'react';
+import App from '../App';
+import {RootState, Page} from '../../../reducers';
 
-it("renders correctly", () => {
+it('renders correctly', () => {
   const store = configureStore<Partial<RootState>>()({
     app: {
-      currentPage: Page.HomePage
-    }
+      currentPage: Page.HomePage,
+    },
   });
 
   const props = {
-    store
+    store,
   };
 
   const component = <App {...props} />;

@@ -70,7 +70,7 @@ export function resetTasks(): GameActionTypes {
   };
 }
 
-export function setTables(tables): GameActionTypes {
+export function setTables(tables: string): GameActionTypes {
   return {
     type: SET_TABLES,
     payload: tables,
