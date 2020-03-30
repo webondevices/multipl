@@ -25,7 +25,7 @@ const mapStateToProps = (state: RootState) => ({
 type Props = ReturnType<typeof mapStateToProps> & typeof actions & PageProps;
 
 const Container = styled.div`
-  width: 600px;
+  width: 1000px;
   margin: ${theme.unit * 3}px auto;
   text-align: center;
   background-color: ${theme.interfaceBackground};

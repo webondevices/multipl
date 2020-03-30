@@ -11,7 +11,7 @@ firebase.initialise();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App color="Blue" />
+    <App />
   </Provider>,
   document.getElementById('root'),
 );

@@ -1,4 +1,4 @@
-import {Multiplication} from '../reducers';
+import {Multiplication, Sets} from '../reducers';
 import {
   setPlayerName,
   incrementTimer,
@@ -7,9 +7,8 @@ import {
   setCurrentTask,
   sliceTask,
   setAnswer,
-  resetTasks,
-  setTables,
-  sliceNextRandomTask,
+  setSet,
+  sliceNextTask,
   SET_PLAYER_NAME,
   INCREMENT_TIMER,
   SET_TIMER,
@@ -17,8 +16,7 @@ import {
   SET_CURRENT_TASK,
   SLICE_TASK,
   SET_ANSWER,
-  RESET_TASKS,
-  SET_TABLES,
+  SET_TASKS,
 } from '.';
 
 test("creates the 'setPlayerName' action", () => {
@@ -89,21 +87,13 @@ test("creates the 'setAnswer' action", () => {
   });
 });
 
-test("creates the 'resetTasks' action", () => {
-  const action = resetTasks();
+test("creates the 'setSet' action", () => {
+  const value = Sets.red;
+  const action = setSet(value);
 
   expect(action).toEqual({
-    type: RESET_TASKS,
-  });
-});
-
-test("creates the 'setTables' action", () => {
-  const value = '1,2,3';
-  const action = setTables(value);
-
-  expect(action).toEqual({
-    type: SET_TABLES,
-    payload: value,
+    type: SET_TASKS,
+    payload: [],
   });
 });
 
@@ -123,7 +113,7 @@ test('slices next random task', async () => {
 
   jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
-  await sliceNextRandomTask()(dispatch, getState);
+  await sliceNextTask()(dispatch, getState);
 
   expect(dispatch).toHaveBeenNthCalledWith(1, setCurrentTask([2, 2]));
   expect(dispatch).toHaveBeenNthCalledWith(2, sliceTask(1));

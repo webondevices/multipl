@@ -2,21 +2,26 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 import {RootState, Page} from '../../reducers';
-import {easySet} from '../../reducers/gameReducer';
+import {sets, domain} from '../../reducers/gameReducer';
 import * as actions from '../../actions';
 import {Text} from '../Typography/Text';
 import {Button} from '../Button/Button';
+import {getFormattedTime} from '../../utils/helpers';
 
 const mapStateToProps = (state: RootState) => ({
-  playerName: state.game.playerName,
+  playerName: state.player.playerName,
+  playerClass: state.player.playerClass,
   tasks: state.game.tasks,
   elapsedTime: state.game.elapsedTime,
   currentTask: state.game.currentTask,
   answer: state.game.answer,
-  selectedTables: state.game.selectedTables,
+  selectedSet: state.game.selectedSet,
+  selectedDifficulty: state.game.selectedDifficulty,
 });
 
 type Props = ReturnType<typeof mapStateToProps> & typeof actions;
+
+const FIVE_MINUTES = 5 * 60;
 
 const Input = styled.input<{alternate: boolean}>`
   @keyframes fade1 {
@@ -67,6 +72,15 @@ const ProgressBar = styled.div<{total: number; left: number}>`
   transition: width 300ms, background-color 300ms;
 `;
 
+const Counter = styled.div<{warning: boolean}>`
+  font-size: 24px;
+  background-color: ${({warning}) => (warning ? 'red' : 'transparent')};
+  width: 70px;
+  height: 32px;
+  padding: 6px;
+  margin: 0 auto;
+`;
+
 class GamePage extends React.Component<Props, {updated: boolean}> {
   timer: NodeJS.Timeout;
 
@@ -76,6 +90,7 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
 
   constructor(props) {
     super(props);
+    window.scrollTo(0, 0);
     this.timer = setInterval(props.incrementTimer, 1000);
     this.previousTask = props.tasks.length;
     this.animAlternate = false;
@@ -97,11 +112,12 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
       answer,
       setCurrentPage,
       resetGame,
-      selectedTables,
+      selectedSet,
+      selectedDifficulty,
     } = this.props;
-    const seconds = elapsedTime % 60;
-    const minutes = Math.floor(elapsedTime / 60);
-    const total = selectedTables.toString() === easySet.toString() ? 50 : 100;
+    const total =
+      selectedSet !== null ? sets[selectedSet].length * domain.length : 0;
+
     if (tasks.length !== this.previousTask) {
       this.previousTask = tasks.length;
       this.animAlternate = !this.animAlternate;
@@ -109,7 +125,11 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
 
     return (
       <>
-        <Text>Answer all the questions, {playerName}!</Text>
+        <Text>
+          Good luck, {playerName}!<br />
+          You are doing the {selectedSet?.toLowerCase()} set at{' '}
+          {selectedDifficulty?.toLowerCase()} level!
+        </Text>
         <Task>
           {currentTask[0]}x{currentTask[1]}
         </Task>
@@ -124,12 +144,11 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
           value={answer}
         />
         <ProgressBar total={total} left={tasks.length}>
-          Tasks left: {tasks.length}
+          Still to go: {tasks.length + 1}
         </ProgressBar>
-        <div>
-          {minutes}:{seconds < 10 ? '0' : ''}
-          {seconds}
-        </div>
+        <Counter warning={elapsedTime > FIVE_MINUTES}>
+          {getFormattedTime(elapsedTime)}
+        </Counter>
 
         <Button onClick={() => setCurrentPage(Page.HomePage)}>Back</Button>
         <Button onClick={resetGame}>Restart</Button>

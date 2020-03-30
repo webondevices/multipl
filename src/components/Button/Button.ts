@@ -3,10 +3,10 @@ import theme from '../Theme';
 
 export const Button = styled.button`
   box-sizing: border-box;
-  width: 200px;
-  height: ${theme.unit * 5}px;
+  width: 250px;
+  height: ${theme.unit * 8}px;
   margin: ${theme.unit * 3}px;
-  font-size: 20px;
+  font-size: 28px;
   background-color: black;
   border: none;
   color: white;

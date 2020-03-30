@@ -1,27 +1,21 @@
 import {ThunkDispatch} from 'redux-thunk';
-import {Multiplication, RootState, Page} from '../reducers';
+import {Multiplication, RootState, Page, Sets, Difficulties} from '../reducers';
+import {sets, domain} from '../reducers/gameReducer';
 import {
-  SET_PLAYER_NAME,
   SET_ROUND_STATE,
   SET_CURRENT_TASK,
   INCREMENT_TIMER,
   SET_TIMER,
   SLICE_TASK,
   SET_ANSWER,
-  RESET_TASKS,
-  SET_TABLES,
+  SET_TASKS,
+  SET_SET,
+  SET_DIFFICULTY,
   GameActionTypes,
   AppActionTypes,
 } from './types';
 import {setCurrentPage} from './appActions';
 import * as firebase from '../utils/firebase';
-
-export function setPlayerName(name: string): GameActionTypes {
-  return {
-    type: SET_PLAYER_NAME,
-    payload: name,
-  };
-}
 
 export function incrementTimer(): GameActionTypes {
   return {
@@ -64,29 +58,79 @@ export function setAnswer(answer: string): GameActionTypes {
   };
 }
 
-export function resetTasks(): GameActionTypes {
+export function setTasks(tasks: Array<Multiplication>): GameActionTypes {
   return {
-    type: RESET_TASKS,
+    type: SET_TASKS,
+    payload: tasks,
   };
 }
 
-export function setTables(tables: string): GameActionTypes {
+export function setSet(set: Sets): GameActionTypes {
   return {
-    type: SET_TABLES,
-    payload: tables,
+    type: SET_SET,
+    payload: set,
   };
 }
 
-export function sliceNextRandomTask() {
+export function setDifficulty(difficulty: Difficulties): GameActionTypes {
+  return {
+    type: SET_DIFFICULTY,
+    payload: difficulty,
+  };
+}
+
+function shuffle(arr) {
+  const newArray: Multiplication[] = [];
+  const incomingArray: Multiplication[] = [...arr];
+
+  while (incomingArray.length > 0) {
+    const randomIndex = Math.floor(Math.random() * incomingArray.length);
+    newArray.push(incomingArray[randomIndex]);
+    incomingArray.splice(randomIndex, 1);
+  }
+
+  return newArray;
+}
+
+export function generateTasks() {
+  return async (
+    dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
+    getState: () => RootState,
+  ) => {
+    const {selectedDifficulty, selectedSet} = getState().game;
+    let combinations;
+
+    if (selectedDifficulty !== null && selectedSet !== null) {
+      const tables: number[] = sets[selectedSet];
+      switch (selectedDifficulty) {
+        default:
+        case Difficulties.beginner:
+          combinations = tables.map(t => domain.map(d => [d, t]));
+          dispatch(setTasks(combinations.flat()));
+          break;
+        case Difficulties.intermediate:
+          combinations = tables.map(t => shuffle(domain).map(d => [d, t]));
+          dispatch(setTasks(combinations.flat()));
+          break;
+        case Difficulties.advanced:
+          combinations = tables.map(t => domain.map(d => [d, t]));
+          dispatch(setTasks(shuffle(combinations.flat())));
+          break;
+      }
+    }
+  };
+}
+
+export function sliceNextTask() {
   return async (
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
     getState: () => RootState,
   ) => {
     const {tasks} = getState().game;
-    const randomIndex = Math.floor(Math.random() * tasks.length);
+    const nextTask = tasks[0];
 
-    dispatch(setCurrentTask(tasks[randomIndex]));
-    dispatch(sliceTask(randomIndex));
+    dispatch(setCurrentTask(nextTask));
+    dispatch(sliceTask(0));
   };
 }
 
@@ -99,29 +143,31 @@ export function checkAnswer() {
       answer,
       currentTask,
       tasks,
-      selectedTables,
-      playerName,
+      selectedSet,
+      selectedDifficulty,
       elapsedTime,
     } = getState().game;
+    const {playerName, playerClass} = getState().player;
     const actualAnswer = currentTask[0] * currentTask[1];
 
     if (answer.length > actualAnswer.toString().length) {
       dispatch(setAnswer(''));
     }
 
-    if (parseInt(answer, 10) === actualAnswer) {
+    if (parseInt(answer, 10) === actualAnswer && selectedSet !== null) {
       dispatch(setAnswer(''));
       if (tasks.length > 0) {
-        dispatch(sliceNextRandomTask());
+        dispatch(sliceNextTask());
       } else {
+        dispatch(setCurrentPage(Page.ResultPage));
         firebase
-          .saveItem(selectedTables.toString(), {
+          .saveItem(`${selectedSet}${selectedDifficulty}`, {
             playerName,
+            playerClass,
             elapsedTime,
           })
           .then(() => {
             firebase.logEvent('goal_completion', {name: 'completed'});
-            dispatch(setCurrentPage(Page.ResultPage));
           });
       }
     }
@@ -132,8 +178,8 @@ export function resetGame() {
   return async (
     dispatch: ThunkDispatch<RootState, {}, GameActionTypes | AppActionTypes>,
   ) => {
-    dispatch(resetTasks());
-    dispatch(sliceNextRandomTask());
+    dispatch(generateTasks());
+    dispatch(sliceNextTask());
     dispatch(setTimer(0));
   };
 }

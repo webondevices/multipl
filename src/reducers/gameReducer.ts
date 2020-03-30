@@ -1,69 +1,41 @@
 import {
   GameActionTypes,
-  SET_PLAYER_NAME,
-  VALIDATE_PLAYER_NAME,
   SET_CURRENT_TASK,
   SET_ROUND_STATE,
   INCREMENT_TIMER,
   SET_TIMER,
   SLICE_TASK,
   SET_ANSWER,
-  RESET_TASKS,
-  SET_TABLES,
+  SET_TASKS,
+  SET_SET,
+  SET_DIFFICULTY,
 } from '../actions/types';
 
-import {GameState, Multiplication} from './types';
+import {GameState, Sets} from './types';
 
-export const fullSet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-export const easySet = [1, 2, 3, 5, 10];
-
-const getCombinations = selectedTables => {
-  const combinations: Array<Multiplication> = [];
-  selectedTables.forEach(x => fullSet.forEach(y => combinations.push([x, y])));
-  return combinations;
+export const sets = {
+  [Sets.red]: [0, 1, 2, 5, 10],
+  [Sets.orange]: [0, 1, 2, 4, 8],
+  [Sets.yellow]: [0, 1, 2, 3, 6],
+  [Sets.green]: [3, 4, 5, 6, 8, 12],
+  [Sets.blue]: [7, 8, 9, 10, 11, 12],
+  [Sets.indigo]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 };
 
+export const domain = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 export const gameInitialState: GameState = {
-  playerName: '',
-  playerNameValid: false,
-  playerNameError: '',
-  selectedTables: easySet,
+  selectedSet: null,
+  selectedDifficulty: null,
   roundActive: false,
   elapsedTime: 0,
-  tasks: getCombinations(easySet),
+  tasks: [],
   currentTask: [0, 0],
   answer: '',
 };
 
-const validateName = playerName => {
-  let newState = {};
-  if (playerName.length > 0) {
-    newState = {
-      playerNameValid: true,
-      playerNameError: '',
-    };
-  } else {
-    newState = {
-      playerNameValid: false,
-      playerNameError: 'Please enter a valid name!',
-    };
-  }
-  return newState;
-};
-
 export function gameReducer(state = gameInitialState, action: GameActionTypes) {
   switch (action.type) {
-    case SET_PLAYER_NAME:
-      return {
-        ...state,
-        playerName: action.payload,
-        playerNameError: '',
-      };
-    case VALIDATE_PLAYER_NAME:
-      return {
-        ...state,
-        ...validateName(state.playerName),
-      };
     case INCREMENT_TIMER:
       return {
         ...state,
@@ -96,17 +68,20 @@ export function gameReducer(state = gameInitialState, action: GameActionTypes) {
         ...state,
         answer: action.payload,
       };
-    case RESET_TASKS:
+    case SET_TASKS:
       return {
         ...state,
-        tasks: getCombinations(state.selectedTables),
+        tasks: action.payload,
       };
-    case SET_TABLES:
-      const newTables = action.payload.split(',').map(str => parseInt(str, 10));
+    case SET_SET:
       return {
         ...state,
-        selectedTables: newTables,
-        tasks: getCombinations(newTables),
+        selectedSet: action.payload,
+      };
+    case SET_DIFFICULTY:
+      return {
+        ...state,
+        selectedDifficulty: action.payload,
       };
     default:
       return state;
