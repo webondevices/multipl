@@ -14,9 +14,9 @@ export const InputLabel = styled.label`
 `;
 
 export const InputField = styled.input`
-  box-sizing: border-box;
   display: block;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: ${theme.unit * 5}px;
   margin: ${theme.unit * 3}px auto;
   padding: ${theme.unit * 3}px ${theme.unit * 2}px;

@@ -49,6 +49,7 @@ const Name = styled.div`
 `;
 const Result = styled.div`
   width: 50%;
+  text-align: right;
 `;
 
 class Highscores extends React.Component<Props, State> {

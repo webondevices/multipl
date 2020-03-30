@@ -60,7 +60,7 @@ const Task = styled.div`
 
 const ProgressBar = styled.div<{total: number; left: number}>`
   width: calc((80% / (${({total, left}) => total / (total - left)})) + 20%);
-  height: 30px;
+  height: 40px;
   margin: 10px auto;
   padding-top: 10px;
   color: white;
@@ -75,10 +75,14 @@ const ProgressBar = styled.div<{total: number; left: number}>`
 const Counter = styled.div<{warning: boolean}>`
   font-size: 24px;
   background-color: ${({warning}) => (warning ? 'red' : 'transparent')};
-  width: 70px;
-  height: 32px;
+  width: 80px;
+  height: 44px;
   padding: 6px;
   margin: 0 auto;
+`;
+
+const GameButton = styled(Button)`
+  margin: 8px;
 `;
 
 class GamePage extends React.Component<Props, {updated: boolean}> {
@@ -150,8 +154,10 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
           {getFormattedTime(elapsedTime)}
         </Counter>
 
-        <Button onClick={() => setCurrentPage(Page.HomePage)}>Back</Button>
-        <Button onClick={resetGame}>Restart</Button>
+        <GameButton onClick={() => setCurrentPage(Page.HomePage)}>
+          Back
+        </GameButton>
+        <GameButton onClick={resetGame}>Restart</GameButton>
       </>
     );
   }

@@ -79,7 +79,7 @@ export function setDifficulty(difficulty: Difficulties): GameActionTypes {
   };
 }
 
-function shuffle(arr) {
+export function shuffle(arr) {
   const newArray: Multiplication[] = [];
   const incomingArray: Multiplication[] = [...arr];
 

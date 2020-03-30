@@ -39,6 +39,8 @@ const difficultyColours = {
 
 const TablesFieldset = styled.fieldset`
   border: none;
+  margin: 0;
+  padding: 0;
 `;
 
 const TablesRadio = styled.input`
@@ -47,7 +49,8 @@ const TablesRadio = styled.input`
 
 const TablesLabel = styled.label<{labelColour: string}>`
   display: block;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   margin: 10px auto;
   padding: 10px;
   font-size: 22px;
@@ -65,14 +68,27 @@ const TablesLabel = styled.label<{labelColour: string}>`
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 const LeftPanel = styled.div<{highscoreOn: boolean}>`
-  width: ${({highscoreOn}) => (highscoreOn ? '50%' : '100%')};
+  width: 100%;
   transition: width 300ms;
+
+  @media (min-width: 768px) {
+    width: ${({highscoreOn}) => (highscoreOn ? '50%' : '100%')};
+  }
 `;
 const RightPanel = styled.div<{highscoreOn: boolean}>`
-  width: ${({highscoreOn}) => (highscoreOn ? '50%' : '0')};
+  width: 100%;
   transition: width 300ms;
+
+  @media (min-width: 768px) {
+    width: ${({highscoreOn}) => (highscoreOn ? '50%' : '0')};
+  }
 `;
 
 const HomePage: React.FC<Props> = props => {

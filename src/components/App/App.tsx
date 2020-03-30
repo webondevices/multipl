@@ -16,6 +16,10 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     margin: 0;
   }
+
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
 `;
 
 const mapStateToProps = (state: RootState) => ({
@@ -25,11 +29,18 @@ const mapStateToProps = (state: RootState) => ({
 type Props = ReturnType<typeof mapStateToProps> & typeof actions & PageProps;
 
 const Container = styled.div`
-  width: 1000px;
-  margin: ${theme.unit * 3}px auto;
+  width: calc(100% - ${theme.unit * 3}px);
+  max-width: 850px;
+  margin: ${theme.unit * 1.5}px auto;
   text-align: center;
   background-color: ${theme.interfaceBackground};
-  padding: ${theme.unit * 5}px;
+  padding: ${theme.unit * 2.5}px;
+
+  @media (min-width: 768px) {
+    width: calc(100% - ${theme.unit * 6}px);
+    margin: ${theme.unit * 3}px auto;
+    padding: ${theme.unit * 5}px;
+  }
 `;
 
 const PageTitle = styled.h1`

@@ -1,6 +1,6 @@
 import {setCurrentPage, proceedToGame, SET_CURRENT_PAGE} from '.';
-import {Page} from '../reducers';
-import {validatePlayerName} from './playerActions';
+import {Page, Sets, Difficulties} from '../reducers';
+import {validatePlayerName, validatePlayerClass} from './playerActions';
 
 jest.mock('../utils/firebase');
 
@@ -14,18 +14,24 @@ test("creates the 'setCurrentPage' action", () => {
   });
 });
 
-test('progresses to Game page when name is valid', async () => {
+test('progresses to Game page when name and class are valid', async () => {
   const dispatch = jest.fn();
   const getState = jest.fn();
 
-  getState.mockReturnValueOnce({
-    game: {
+  getState.mockReturnValue({
+    player: {
       playerNameValid: true,
+      playerClassValid: true,
+    },
+    game: {
+      selectedSet: Sets.red,
+      selectedDifficulty: Difficulties.beginner,
     },
   });
 
   await proceedToGame()(dispatch, getState);
 
   expect(dispatch).toHaveBeenNthCalledWith(1, validatePlayerName());
-  expect(dispatch).toHaveBeenNthCalledWith(2, setCurrentPage(Page.GamePage));
+  expect(dispatch).toHaveBeenNthCalledWith(2, validatePlayerClass());
+  expect(dispatch).toHaveBeenNthCalledWith(3, setCurrentPage(Page.GamePage));
 });

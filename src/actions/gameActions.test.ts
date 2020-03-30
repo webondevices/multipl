@@ -1,15 +1,29 @@
-import {Multiplication, Sets} from '../reducers';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import {
-  setPlayerName,
+  Multiplication,
+  Sets,
+  Difficulties,
+  RootState,
+  GameState,
+  PlayerState,
+  Page,
+} from '../reducers';
+import {
   incrementTimer,
   setTimer,
   setRoundState,
   setCurrentTask,
   sliceTask,
   setAnswer,
+  setTasks,
   setSet,
+  setDifficulty,
   sliceNextTask,
-  SET_PLAYER_NAME,
+  shuffle,
+  checkAnswer,
+  setCurrentPage,
+  resetGame,
   INCREMENT_TIMER,
   SET_TIMER,
   SET_ROUND_STATE,
@@ -17,17 +31,12 @@ import {
   SLICE_TASK,
   SET_ANSWER,
   SET_TASKS,
+  SET_SET,
+  SET_DIFFICULTY,
 } from '.';
+import {expectedOutput} from './expectedOutput';
 
-test("creates the 'setPlayerName' action", () => {
-  const value = 'Mate';
-  const action = setPlayerName(value);
-
-  expect(action).toEqual({
-    type: SET_PLAYER_NAME,
-    payload: value,
-  });
-});
+jest.mock('../utils/firebase');
 
 test("creates the 'incrementTimer' action", () => {
   const action = incrementTimer();
@@ -87,17 +96,48 @@ test("creates the 'setAnswer' action", () => {
   });
 });
 
+test("creates the 'setTasks' action", () => {
+  const value: Multiplication[] = [
+    [1, 0],
+    [0, 1],
+  ];
+  const action = setTasks(value);
+
+  expect(action).toEqual({
+    type: SET_TASKS,
+    payload: value,
+  });
+});
+
 test("creates the 'setSet' action", () => {
   const value = Sets.red;
   const action = setSet(value);
 
   expect(action).toEqual({
-    type: SET_TASKS,
-    payload: [],
+    type: SET_SET,
+    payload: value,
   });
 });
 
-test('slices next random task', async () => {
+test("creates the 'setDifficulty' action", () => {
+  const value = Difficulties.beginner;
+  const action = setDifficulty(value);
+
+  expect(action).toEqual({
+    type: SET_DIFFICULTY,
+    payload: value,
+  });
+});
+
+test('shuffle()', async () => {
+  jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
+  const inputArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  expect(shuffle(inputArray)).toEqual([5, 4, 6, 3, 7, 2, 8, 1, 9, 0]);
+  (global.Math.random as any).mockRestore();
+});
+
+test('slices next task', async () => {
   const dispatch = jest.fn();
   const getState = jest.fn();
 
@@ -111,12 +151,113 @@ test('slices next random task', async () => {
     },
   });
 
-  jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
-
   await sliceNextTask()(dispatch, getState);
 
-  expect(dispatch).toHaveBeenNthCalledWith(1, setCurrentTask([2, 2]));
-  expect(dispatch).toHaveBeenNthCalledWith(2, sliceTask(1));
+  expect(dispatch).toHaveBeenNthCalledWith(1, setCurrentTask([1, 1]));
+  expect(dispatch).toHaveBeenNthCalledWith(2, sliceTask(0));
+});
 
-  (global.Math.random as any).mockRestore();
+test('slice next task if game not finished and answer correct', async () => {
+  const state = {
+    game: {
+      answer: '16',
+      currentTask: [4, 4],
+      tasks: [
+        [1, 1],
+        [2, 2],
+        [3, 3],
+      ],
+      selectedSet: Sets.red,
+      selectedDifficulty: Difficulties.beginner,
+      elapsedTime: 99,
+    } as GameState,
+    player: {
+      playerName: 'Maya',
+      playerClass: '3D',
+    } as PlayerState,
+  };
+
+  const store: any = configureStore<Partial<RootState>>([thunk])(state);
+  await store.dispatch(checkAnswer());
+
+  expect(store.getActions()).toEqual([
+    setAnswer(''),
+    setCurrentTask([1, 1]),
+    sliceTask(0),
+  ]);
+});
+
+test('clear answer if answer longer than solution', async () => {
+  const state = {
+    game: {
+      answer: '10',
+      currentTask: [2, 2],
+      tasks: [[1, 1]],
+      selectedSet: Sets.red,
+      selectedDifficulty: Difficulties.beginner,
+      elapsedTime: 99,
+    } as GameState,
+    player: {
+      playerName: 'Maya',
+      playerClass: '3D',
+    } as PlayerState,
+  };
+
+  const store: any = configureStore<Partial<RootState>>([thunk])(state);
+  await store.dispatch(checkAnswer());
+
+  expect(store.getActions()).toEqual([setAnswer('')]);
+});
+
+test('progress to result page if all tasks cleared', async () => {
+  const state = {
+    game: {
+      answer: '4',
+      currentTask: [2, 2],
+      tasks: [],
+      selectedSet: Sets.red,
+      selectedDifficulty: Difficulties.beginner,
+      elapsedTime: 99,
+      roundActive: false,
+    } as GameState,
+    player: {
+      playerName: 'Maya',
+      playerClass: '3D',
+    } as PlayerState,
+  };
+
+  const store: any = configureStore<Partial<RootState>>([thunk])(state);
+  await store.dispatch(checkAnswer());
+
+  expect(store.getActions()).toEqual([
+    setAnswer(''),
+    setCurrentPage(Page.ResultPage),
+  ]);
+});
+
+test('reset game', async () => {
+  const state = {
+    game: {
+      answer: '4',
+      currentTask: [2, 2],
+      tasks: [],
+      selectedSet: Sets.red,
+      selectedDifficulty: Difficulties.beginner,
+      elapsedTime: 99,
+      roundActive: false,
+    } as GameState,
+    player: {
+      playerName: 'Maya',
+      playerClass: '3D',
+    } as PlayerState,
+  };
+
+  const store: any = configureStore<Partial<RootState>>([thunk])(state);
+  await store.dispatch(resetGame());
+  expect(store.getActions()).toEqual([
+    setTasks(expectedOutput.red.beginner as Multiplication[]),
+    {type: SET_CURRENT_TASK, payload: undefined},
+    sliceTask(0),
+    setTimer(0),
+  ]);
 });

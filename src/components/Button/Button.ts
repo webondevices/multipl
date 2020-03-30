@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import theme from '../Theme';
 
 export const Button = styled.button`
-  box-sizing: border-box;
-  width: 250px;
+  width: 100%;
+  max-width: 300px;
   height: ${theme.unit * 8}px;
-  margin: ${theme.unit * 3}px;
+  margin: ${theme.unit * 3}px 0;
   font-size: 28px;
   background-color: black;
   border: none;
