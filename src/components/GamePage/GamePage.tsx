@@ -60,6 +60,7 @@ const Task = styled.div`
 
 const ProgressBar = styled.div<{total: number; left: number}>`
   width: calc((80% / (${({total, left}) => total / (total - left)})) + 20%);
+  min-width: 120px;
   height: 40px;
   margin: 10px auto;
   padding-top: 10px;
@@ -139,7 +140,7 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
         </Task>
         <Input
           alternate={this.animAlternate}
-          type="text"
+          type="number"
           autoFocus
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setAnswer(e.target.value);

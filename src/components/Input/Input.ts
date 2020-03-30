@@ -14,6 +14,7 @@ export const InputLabel = styled.label`
 `;
 
 export const InputField = styled.input`
+  appearance: none;
   display: block;
   width: 100%;
   max-width: 300px;
