@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import styled from 'styled-components';
 import {RootState, Page} from '../../reducers';
 import * as actions from '../../actions';
 import {Text} from '../Typography/Text';
@@ -17,22 +18,22 @@ const mapStateToProps = (state: RootState) => ({
 
 type Props = ReturnType<typeof mapStateToProps> & typeof actions;
 
+const ResultButton = styled(Button)`
+  margin: 8px;
+`;
+
 const ResultPage: React.FC<Props> = props => {
   const {
     elapsedTime,
     setCurrentPage,
     playerName,
-    playerClass,
     selectedSet,
     selectedDifficulty,
   } = props;
 
   return (
     <>
-      <Text>
-        Congratulations, {playerName} from {playerClass}! You completed the task
-        in:
-      </Text>
+      <Text>Well done, {playerName}! You have completed the set in:</Text>
 
       <h1>{getFormattedTime(elapsedTime)}</h1>
 
@@ -41,8 +42,12 @@ const ResultPage: React.FC<Props> = props => {
         {selectedSet?.toLowerCase()}:
       </h2>
       <Highscores set={selectedSet} difficulty={selectedDifficulty} />
-      <Button onClick={() => setCurrentPage(Page.HomePage)}>Back home</Button>
-      <Button onClick={() => setCurrentPage(Page.GamePage)}>Restart</Button>
+      <ResultButton onClick={() => setCurrentPage(Page.HomePage)}>
+        Change difficulty
+      </ResultButton>
+      <ResultButton onClick={() => setCurrentPage(Page.GamePage)}>
+        Restart
+      </ResultButton>
     </>
   );
 };

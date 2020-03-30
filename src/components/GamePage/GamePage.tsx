@@ -54,7 +54,7 @@ const Input = styled.input<{alternate: boolean}>`
 `;
 
 const Task = styled.div`
-  font-size: 24px;
+  font-size: 32px;
   margin: 20px;
 `;
 
@@ -135,7 +135,7 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
           {selectedDifficulty?.toLowerCase()} level!
         </Text>
         <Task>
-          {currentTask[0]}x{currentTask[1]}
+          {currentTask[0]} x {currentTask[1]}
         </Task>
         <Input
           alternate={this.animAlternate}

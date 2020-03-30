@@ -30,6 +30,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ComponentProps;
 type State = {
   highscores: Array<HighScore>;
+  loading: boolean;
 };
 
 const Score = styled.div<{selected: boolean}>`
@@ -61,6 +62,7 @@ class Highscores extends React.Component<Props, State> {
     super(props);
     this.state = {
       highscores: [],
+      loading: true,
     };
     this.extraScores = 5;
     this.isAvailable = false;
@@ -68,6 +70,7 @@ class Highscores extends React.Component<Props, State> {
 
   componentDidMount() {
     this.isAvailable = true;
+    this.setState({loading: true});
     this.updateScores();
   }
 
@@ -100,30 +103,44 @@ class Highscores extends React.Component<Props, State> {
       }
 
       if (this.isAvailable) {
-        this.setState({highscores});
+        this.setState({highscores, loading: false});
       }
     });
   }
 
   render() {
     const {elapsedTime, playerName, playerClass} = this.props;
-    const {highscores} = this.state;
+    const {highscores, loading} = this.state;
 
-    return highscores.map(
-      ({elapsedTime: time, playerName: name, playerClass: pclass, index}) => (
-        <Score
-          key={name + pclass + time}
-          selected={
-            name === playerName &&
-            time === elapsedTime &&
-            pclass === playerClass
-          }
-        >
-          <Name>{`${index + 1}. ${name}, ${pclass}`}</Name>
-          <Result>{`${getFormattedTime(time)}`}</Result>
-        </Score>
-      ),
-    );
+    const getContent = () =>
+      loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div>No results yet. Be the first to complete this!</div>
+      );
+
+    return highscores.length > 0
+      ? highscores.map(
+          ({
+            elapsedTime: time,
+            playerName: name,
+            playerClass: pclass,
+            index,
+          }) => (
+            <Score
+              key={name + pclass + time}
+              selected={
+                name === playerName &&
+                time === elapsedTime &&
+                pclass === playerClass
+              }
+            >
+              <Name>{`${index + 1}. ${name}, ${pclass}`}</Name>
+              <Result>{`${getFormattedTime(time)}`}</Result>
+            </Score>
+          ),
+        )
+      : getContent();
   }
 }
 

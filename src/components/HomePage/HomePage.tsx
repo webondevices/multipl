@@ -84,10 +84,11 @@ const LeftPanel = styled.div<{highscoreOn: boolean}>`
 `;
 const RightPanel = styled.div<{highscoreOn: boolean}>`
   width: 100%;
-  transition: width 300ms;
+  transition: width 300ms, opacity 300ms 300ms;
 
   @media (min-width: 768px) {
     width: ${({highscoreOn}) => (highscoreOn ? '50%' : '0')};
+    opacity: ${({highscoreOn}) => (highscoreOn ? '1' : '0')};
   }
 `;
 
