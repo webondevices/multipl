@@ -41,7 +41,7 @@ const Input = styled.input<{alternate: boolean}>`
     }
   }
 
-  width: 115px;
+  width: 160px;
   height: 100px;
   font-size: 64px;
   text-align: center;
@@ -132,7 +132,7 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
       <>
         <Text>
           Good luck, {playerName}!<br />
-          You are doing the {selectedSet?.toLowerCase()} set at{' '}
+          You are working on the {selectedSet?.toLowerCase()} set at{' '}
           {selectedDifficulty?.toLowerCase()} level!
         </Text>
         <Task>
@@ -140,7 +140,7 @@ class GamePage extends React.Component<Props, {updated: boolean}> {
         </Task>
         <Input
           alternate={this.animAlternate}
-          type="number"
+          type="tel"
           autoFocus
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setAnswer(e.target.value);

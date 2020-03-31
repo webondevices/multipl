@@ -114,7 +114,7 @@ const HomePage: React.FC<Props> = props => {
 
   return (
     <>
-      <Text>Master the times tables by competing with your firends!</Text>
+      <Text>Master the times tables by practicing with your friends!</Text>
       <InputField
         type="text"
         id="player-name"
@@ -140,7 +140,6 @@ const HomePage: React.FC<Props> = props => {
       <ErrorLabel show={!playerClassValid && playerClassError}>
         {playerClassError}
       </ErrorLabel>
-      <Text>Start at beginner red and progress slowly!</Text>
       <Container>
         <LeftPanel highscoreOn={highscoreOn}>
           <TablesFieldset>
