@@ -85,6 +85,7 @@ const LeftPanel = styled.div<{highscoreOn: boolean}>`
 const RightPanel = styled.div<{highscoreOn: boolean}>`
   width: 100%;
   transition: width 300ms, opacity 300ms 300ms;
+  position: relative;
 
   @media (min-width: 768px) {
     width: ${({highscoreOn}) => (highscoreOn ? '50%' : '0')};
@@ -197,7 +198,11 @@ const HomePage: React.FC<Props> = props => {
                 Best results in {selectedDifficulty?.toLowerCase()}{' '}
                 {selectedSet?.toLowerCase()}:
               </h2>
-              <Highscores set={selectedSet} difficulty={selectedDifficulty} />
+              <Highscores
+                scroll
+                set={selectedSet}
+                difficulty={selectedDifficulty}
+              />
             </>
           )}
         </RightPanel>
